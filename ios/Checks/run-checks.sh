@@ -52,3 +52,9 @@ swiftc -parse-as-library -module-cache-path "$CHECK_BUILD_DIR/module-cache" \
   Fonoo/CallSession.swift Fonoo/TeamMember.swift Fonoo/DeviceContact.swift Checks/TeamPresenceChecks.swift \
   -o "$CHECK_BUILD_DIR/TeamPresenceChecks"
 "$CHECK_BUILD_DIR/TeamPresenceChecks"
+
+swiftc -parse-as-library -module-cache-path "$CHECK_BUILD_DIR/module-cache" \
+  Fonoo/CallSession.swift Fonoo/FavoriteGroups.swift Checks/FavoriteGroupChecks.swift \
+  -o "$CHECK_BUILD_DIR/FavoriteGroupChecks"
+"$CHECK_BUILD_DIR/FavoriteGroupChecks"
+python3 Checks/favorite-sync-checks.py

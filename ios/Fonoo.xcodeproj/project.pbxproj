@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA0000000000000000000002 /* FavoriteGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000001 /* FavoriteGroups.swift */; };
 		B9CA00000000000000000001 /* AppIntentVocabulary.plist in Resources */ = {isa = PBXBuildFile; fileRef = C9CA00000000000000000001 /* AppIntentVocabulary.plist */; };
 		B8CA00000000000000000001 /* SystemCallActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8CA00000000000000000001 /* SystemCallActivity.swift */; };
 		B7CA00000000000000000001 /* CarPlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CA00000000000000000001 /* CarPlay.swift */; };
@@ -41,6 +42,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FA0000000000000000000001 /* FavoriteGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonoo/FavoriteGroups.swift; sourceTree = SOURCE_ROOT; };
         A9CA00000000000000000001 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
         A9CA00000000000000000002 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = de; path = de.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
 		A8CA00000000000000000001 /* SystemCallActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemCallActivity.swift; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 		500A096B8A0044C96F4B0E55 /* Fonoo */ = {
 			isa = PBXGroup;
 			children = (
+				FA0000000000000000000001 /* FavoriteGroups.swift */,
                 C9CA00000000000000000001 /* AppIntentVocabulary.plist */,
 				A2CA00000000000000000000 /* IncomingCallCoordinator.swift */,
 				A3CA00000000000000000001 /* CustomerAccount.swift */,
@@ -234,6 +237,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA0000000000000000000002 /* FavoriteGroups.swift in Sources */,
 				B2CA00000000000000000000 /* IncomingCallCoordinator.swift in Sources */,
 				B3CA00000000000000000001 /* CustomerAccount.swift in Sources */,
 				05B143109CF0EE94FF39FFF2 /* TeamPreview.swift in Sources */,
@@ -274,7 +278,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Configuration/CarPlay.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = T8KX8P7FUS;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Configuration/CarPlay-Info.plist;
@@ -309,7 +313,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Configuration/CarPlay.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = T8KX8P7FUS;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Configuration/CarPlay-Info.plist;

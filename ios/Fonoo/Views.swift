@@ -130,11 +130,11 @@ struct RootView: View {
             if TeamPreview.enabled { tab = .team; didChooseStart = true; return }
             #endif
             let desired = HomeTab(rawValue: startTab) ?? .favorites
-            tab = desired == .favorites && phone.favorites.isEmpty ? .keypad : desired
+            tab = desired == .favorites && phone.favorites.isEmpty && phone.favoriteGroups.count == 1 ? .keypad : desired
             didChooseStart = true
         }
         .onChange(of: phone.favorites.isEmpty) { _, empty in
-            if empty && tab == .favorites { tab = .keypad }
+            if empty && phone.favoriteGroups.count == 1 && tab == .favorites { tab = .keypad }
         }
     }
 }
@@ -185,29 +185,18 @@ struct FavoritesView: View {
                         Spacer()
                         Button("Bearbeiten") { phone.sheetOpened("favorites"); edit = true }.font(.subheadline)
                     }
-                    if matches.isEmpty {
+                    if matches.isEmpty && phone.favoriteGroups.count == 1 {
                         ContentUnavailableView(query.isEmpty ? "Deine Favoriten" : "Kein Kontakt gefunden", systemImage: "star", description: Text("Öffne Kontakte oder suche hier nach einem Namen. Mit dem Stern speicherst du eine Rufnummer als Favorit."))
                     }
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 145), spacing: 12)], spacing: 12) {
-                        ForEach(matches) { contact in
-                            Button { phone.start(contact) } label: {
-                                VStack(alignment: .leading, spacing: 7) {
-                                    HStack(alignment: .top) {
-                                        Avatar(contact: contact)
-                                        Spacer(minLength: 4)
-                                        Image(systemName: "phone").font(.subheadline).foregroundStyle(FonooStyle.accent)
-                                    }.padding(.bottom, 9)
-                                    Text(contact.name).font(.headline).foregroundStyle(.primary)
-                                    Text("\(contact.role) · \(contact.number)").font(.caption).foregroundStyle(.secondary)
-                                    if let member = customer.presenceMember(for:contact) { PresenceStatusView(userID:member.id) }
-                                }
-                                .frame(maxWidth: .infinity, alignment: .leading).padding(17)
-                                .background(FonooStyle.surface, in: RoundedRectangle(cornerRadius: 23))
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityLabel("\(contact.name) anrufen, \(contact.role), \(contact.number)")
+                    ForEach(phone.favoriteGroups) { group in
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text(group.name).font(.title3.bold())
+                            if group.contacts.isEmpty {
+                                Text("Noch keine Favoriten in dieser Gruppe.").font(.caption).foregroundStyle(.secondary)
+                            } else { favoriteCards(group.contacts) }
                         }
                     }
+                    FavoriteSyncNotice()
                     if let notice = phone.notice { Text(notice).font(.footnote).foregroundStyle(.secondary) }
                 }
             }.padding(20)
@@ -215,6 +204,7 @@ struct FavoritesView: View {
         .searchable(text: $query, isPresented: $searching, placement: .navigationBarDrawer(displayMode: .always), prompt: "Name oder Nummer")
         .sheet(isPresented: $edit, onDismiss: { phone.sheetClosed("favorites") }) { FavoriteEditor() }
         .onChange(of: phone.call?.id) { _, id in if id != nil { edit = false; selected = nil } }
+        .onChange(of: customer.signedIn) { _, signedIn in if !signedIn { edit = false; selected = nil } }
         .task(id: shouldLoadContacts) {
             if shouldLoadContacts { await directory.refresh() }
             else { directory.clear(); selected = nil }
@@ -226,6 +216,29 @@ struct FavoritesView: View {
         .onDisappear { directory.clear() }
         .sheet(item: $selected) { person in
             DeviceContactNumbersView(person: person) { phone.start($0) }
+        }
+    }
+
+    private func favoriteCards(_ contacts: [Contact]) -> some View {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 145), spacing: 12)], spacing: 12) {
+            ForEach(contacts) { contact in
+                Button { phone.start(contact) } label: {
+                    VStack(alignment: .leading, spacing: 7) {
+                        HStack(alignment: .top) {
+                            Avatar(contact: contact)
+                            Spacer(minLength: 4)
+                            Image(systemName: "phone").font(.subheadline).foregroundStyle(FonooStyle.accent)
+                        }.padding(.bottom, 9)
+                        Text(contact.name).font(.headline).foregroundStyle(.primary)
+                        Text("\(contact.role) · \(contact.number)").font(.caption).foregroundStyle(.secondary)
+                        if let member = customer.presenceMember(for:contact) { PresenceStatusView(userID:member.id) }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading).padding(17)
+                    .background(FonooStyle.surface, in: RoundedRectangle(cornerRadius: 23))
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("\(contact.name) anrufen, \(contact.role), \(contact.number)")
+            }
         }
     }
 
@@ -316,29 +329,108 @@ struct FavoritesView: View {
     }
 }
 
+struct FavoriteSyncNotice: View {
+    @EnvironmentObject private var phone: PhoneStore
+    @State private var importing = false
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            if !phone.favoriteSyncStatus.isEmpty { Text(phone.favoriteSyncStatus).font(.caption).foregroundStyle(.secondary) }
+            if phone.canImportLegacyFavorites {
+                Button("Vorhandene Favoriten übernehmen") { importing = true }.font(.caption)
+            }
+        }
+        .alert("Vorhandene Favoriten übernehmen?", isPresented: $importing) {
+            Button("Übernehmen") { phone.importLegacyFavorites() }
+            Button("Abbrechen", role: .cancel) {}
+        } message: { Text("Auf diesem Gerät gibt es ältere Favoriten ohne bestätigte Kontozuordnung. Übernimm sie in das angemeldete Konto, wenn es deine eigenen Favoriten sind. Die ursprüngliche Datei bleibt erhalten.") }
+    }
+}
+
 struct FavoriteEditor: View {
     @EnvironmentObject private var phone: PhoneStore
     @Environment(\.dismiss) private var dismiss
+    @State private var mode = 0
+    @State private var name = ""
+    @State private var creating = false
+    @State private var renaming = false
+    @State private var deleting = false
+    @State private var selectedGroup: FavoriteGroup?
     var body: some View {
         NavigationStack {
             List {
-              ForEach(phone.favorites) { contact in
-                Button { phone.toggleFavorite(contact) } label: {
-                    HStack {
-                        ContactLabel(contact: contact)
-                        Spacer()
-                        Image(systemName: phone.favorites.contains(contact) ? "star.fill" : "star")
+                Section {
+                    Picker("Bearbeiten", selection: $mode) {
+                        Text("Gruppen").tag(0); Text("Favoriten").tag(1)
+                    }.pickerStyle(.segmented)
+                }
+                if mode == 0 {
+                    Section {
+                        ForEach(phone.favoriteGroups) { group in
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(group.name).font(.headline)
+                                    Text("\(group.contacts.count) Favoriten").font(.caption).foregroundStyle(.secondary)
+                                }
+                                Spacer()
+                                if !group.isGeneral {
+                                    Menu {
+                                        Button("Umbenennen") { selectedGroup = group; name = group.name; renaming = true }
+                                        Button("Gruppe löschen", role: .destructive) { selectedGroup = group; deleting = true }
+                                    } label: { Image(systemName: "ellipsis") }
+                                        .accessibilityLabel("Gruppe \(group.name) bearbeiten")
+                                }
+                            }
+                        }.onMove { phone.moveFavoriteGroups(from: $0, to: $1) }
+                    } header: { Text("Reihenfolge der Gruppen") }
+                      footer: { Text("Ziehe die Gruppen am Griff nach oben oder unten. Beim Löschen einer Gruppe bleiben ihre Favoriten unter Allgemein erhalten.") }
+                } else {
+                    ForEach(phone.favoriteGroups) { group in
+                        Section(group.name) {
+                            ForEach(group.contacts) { contact in
+                                HStack {
+                                    ContactLabel(contact: contact)
+                                    Spacer()
+                                    Menu {
+                                        ForEach(phone.favoriteGroups) { destination in
+                                            Button(destination.name) { phone.assignFavorite(contact.id, to: destination.id) }
+                                                .disabled(destination.id == group.id)
+                                        }
+                                        Divider()
+                                        Button("Favorit entfernen", role: .destructive) { phone.toggleFavorite(contact) }
+                                    } label: { Image(systemName: "folder") }
+                                        .accessibilityLabel("\(contact.name) in eine andere Gruppe verschieben")
+                                }
+                            }.onMove { phone.moveFavorites(in: group.id, from: $0, to: $1) }
+                            if group.contacts.isEmpty { Text("Noch keine Favoriten").foregroundStyle(.secondary) }
+                        }
                     }
                 }
-                .accessibilityLabel("\(contact.name), \(phone.favorites.contains(contact) ? "Favorit entfernen" : "als Favorit hinzufügen")")
-            }
-              .onMove { phone.moveFavorites(from: $0, to: $1) }
+                if let error = phone.favoriteEditingError { Section { Text(error).foregroundStyle(.red) } }
+                Section { FavoriteSyncNotice() }
             }
             .environment(\.editMode, .constant(.active))
             .scrollContentBackground(.hidden).background(FonooStyle.background)
-            .navigationTitle("Favoriten bearbeiten")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Fertig") { dismiss() } } }
+            .navigationTitle("Favoriten bearbeiten").navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button { name = ""; creating = true } label: { Label("Neue Gruppe", systemImage: "folder.badge.plus") }
+                }
+                ToolbarItem(placement: .confirmationAction) { Button("Fertig") { dismiss() } }
+            }
+            .alert("Neue Gruppe", isPresented: $creating) {
+                TextField("Gruppenname", text: $name)
+                Button("Anlegen") { phone.createFavoriteGroup(name) }.disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                Button("Abbrechen", role: .cancel) {}
+            }
+            .alert("Gruppe umbenennen", isPresented: $renaming) {
+                TextField("Gruppenname", text: $name)
+                Button("Speichern") { if let group = selectedGroup { phone.renameFavoriteGroup(group.id, name: name) } }
+                Button("Abbrechen", role: .cancel) {}
+            }
+            .alert("Gruppe löschen?", isPresented: $deleting) {
+                Button("Löschen", role: .destructive) { if let group = selectedGroup { phone.deleteFavoriteGroup(group.id) } }
+                Button("Abbrechen", role: .cancel) {}
+            } message: { Text("Ihre Favoriten werden nach Allgemein verschoben.") }
         }
     }
 }

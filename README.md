@@ -19,6 +19,18 @@ Simulator-Builds regulär signieren: Ohne App-Identität kann der Schlüsselbund
 
 ## Funktionen und Struktur
 
+Favoriten unterstützen eigene Gruppen mit frei gewählter Reihenfolge. Unter **Favoriten → Bearbeiten** lassen sich Gruppen anlegen, umbenennen und am Griff nach oben oder unten verschieben. Im Bereich **Favoriten** desselben Editors werden Kontakte einer Gruppe zugeordnet und innerhalb ihrer Gruppe sortiert. Beim Löschen einer Gruppe werden ihre Favoriten nach **Allgemein** verschoben. Bestehende Favoriten werden einmalig für das bestätigte bisherige Konto übernommen; die alte Datei bleibt erhalten.
+
+Favoriten und Gruppen werden nach der Anmeldung automatisch mit dem persönlichen fonoo-Konto synchronisiert. Gruppen anlegen, umbenennen, löschen und sortieren sowie Kontakte zuordnen oder sortieren gilt auf jedem Gerät. Die Gruppe **Allgemein** bleibt erhalten; beim Löschen einer eigenen Gruppe werden deren Favoriten dorthin verschoben. Nur ausgewählte Favoriten werden übertragen, nicht das gesamte Adressbuch. Es gibt keinen Schalter zum Starten oder Beenden der Synchronisierung.
+
+Änderungen funktionieren offline und werden bei der nächsten Verbindung abgeglichen. Gleichzeitige Änderungen werden anhand des letzten bestätigten Kontostands zusammengeführt; bei konkurrierenden Änderungen desselben Feldes gewinnt die noch ausstehende lokale Änderung beim erneuten Speichern. Löschungen haben Vorrang vor veralteten Kopien. Der automatische Worker wiederholt Revisionskonflikte höchstens dreimal pro Durchlauf und prüft im Vordergrund alle fünf Sekunden. Abmelden leert die Anzeige und schützt vor verspäteten Antworten einer alten Sitzung. Andere Benutzer und Firmenadministratoren haben keinen Zugriff auf die persönlichen Favoriten.
+
+Bestehende Favoriten werden einmalig dem bestätigten bisherigen Konto zugeordnet. Die alte Datei bleibt unverändert. Alte Favoriten ohne belegte Kontozuordnung erfordern weiterhin **Vorhandene Favoriten übernehmen**, damit die Favoriten einer anderen Person nicht versehentlich übertragen werden.
+
+Build **28** (iOS) enthält die automatische Synchronisierung. Gemeinsame Swift-/Windows-Testdaten prüfen Gruppen, Felder, Zuordnung, Reihenfolge und Löschungen. Die Worker-Prüfungen decken Offline-Neustart, zwei Geräte, begrenzte Revisionswiederholungen, Änderungen während eines Uploads, verlorene Antworten, Kontowechsel und beschädigte Caches ab. API: `GET/POST /v1/cloud/favorites`, Schema 1, Revision pro Benutzer, verschlüsselte serverseitige Speicherung.
+
+Echte Geräteabnahme zwischen iPhone, Mac und Windows bleibt erforderlich. Ein erfolgreicher Quellbuild bestätigt keine Veröffentlichung in TestFlight oder im Windows Store.
+
 `ios/Fonoo/` enthält Anmeldung und automatische Cloud-Nebenstelle, Geräteprofile, Team/Präsenz, Kontakte/Favoriten, synchronisierte Anrufhistorie, Weiterleitungen und Gesprächssteuerung. VoIP-Push, CallKit/LiveCommunicationKit, Siri und CarPlay bleiben erhalten. `SIPConnectionCoordinator` serialisiert Wiederverbindungen; `LinphoneSIPCore` kapselt die einzige Telefonie-Engine. Zertifikatsprüfung, Pflicht-SRTP und gerätegebundene Schlüsselbundablage bleiben aktiv.
 
 Die [Mac-App](https://github.com/ivama-dev/fonoo-macos) übernimmt einen kontrollierten Stand der gemeinsamen Dateien. Änderungen an Konto-, Verbindungs- und API-Modellen müssen auf beiden Plattformen abgestimmt werden.
