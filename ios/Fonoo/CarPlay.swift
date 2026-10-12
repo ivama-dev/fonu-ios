@@ -46,9 +46,9 @@ final class FonooCarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDe
         guard let phone else { return }
         let configured = phone.cloudPushActive
         let limit = min(30, CPListTemplate.maximumItemCount)
-        favorites.emptyViewTitleVariants = [configured ? "Keine Favoriten" : "fonoo einrichten"]
-        favorites.emptyViewSubtitleVariants = [configured ? "Favoriten auf dem iPhone hinzufügen." : "Zuerst auf dem iPhone bei fonoo anmelden."]
-        recents.emptyViewTitleVariants = [configured ? "Keine Anrufe" : "fonoo einrichten"]
+        favorites.emptyViewTitleVariants = [configured ? "Keine Favoriten" : "fonu einrichten"]
+        favorites.emptyViewSubtitleVariants = [configured ? "Favoriten auf dem iPhone hinzufügen." : "Zuerst auf dem iPhone bei fonu anmelden."]
+        recents.emptyViewTitleVariants = [configured ? "Keine Anrufe" : "fonu einrichten"]
         recents.emptyViewSubtitleVariants = favorites.emptyViewSubtitleVariants
         favorites.updateSections([CPListSection(items: configured ? Array(phone.favorites.prefix(limit)).map { item($0, detail: $0.number) } : [])])
         recents.updateSections([CPListSection(items: configured ? Array(phone.recents.prefix(limit)).map { item($0.contact, detail: $0.detail + " · " + $0.contact.number) } : [])])
@@ -78,7 +78,7 @@ final class FonooCarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDe
     }
 }
 
-/// Siri resolves numbers or unambiguous names from the existing local Fonoo
+/// Siri resolves numbers or unambiguous names from the existing local Fonu
 /// favorites/history. It never chooses the first of several matching contacts.
 @MainActor
 final class FonooCallIntentHandler: NSObject, INStartCallIntentHandling {

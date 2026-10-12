@@ -9,8 +9,8 @@
 			<string>INStartCallIntent</string>
 			<key>IntentExamples</key>
 			<array>
-				<string>Rufe Alex mit fonoo an.</string>
-				<string>Starte einen Audioanruf zu Alex mit fonoo.</string>
+				<string>Rufe Alex mit fonu an.</string>
+				<string>Starte einen Audioanruf zu Alex mit fonu.</string>
 			</array>
 		</dict>
 	</array>

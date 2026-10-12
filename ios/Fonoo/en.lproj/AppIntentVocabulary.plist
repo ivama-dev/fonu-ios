@@ -9,8 +9,8 @@
 			<string>INStartCallIntent</string>
 			<key>IntentExamples</key>
 			<array>
-				<string>Call Alex with fonoo.</string>
-				<string>Make an audio call to Alex with fonoo.</string>
+				<string>Call Alex with fonu.</string>
+				<string>Make an audio call to Alex with fonu.</string>
 			</array>
 		</dict>
 	</array>

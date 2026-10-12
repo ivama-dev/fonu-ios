@@ -17,5 +17,5 @@ for language in ('en','de'):
  assert supported<=samples.keys(),f'Missing intent examples: {language}'
  for intent in supported:
   assert isinstance(samples[intent],list) and samples[intent]
-  assert all(isinstance(phrase,str) and phrase.strip() and 'fonoo' in phrase for phrase in samples[intent])
+  assert all(isinstance(phrase,str) and phrase.strip() and 'fonu' in phrase for phrase in samples[intent])
 print('PASS: every supported Siri intent has English/German example phrases'+(' in the built app' if len(sys.argv)>1 else ''))

@@ -51,7 +51,7 @@ struct DeviceContactsContent: View {
         List {
             if directory.access == .limited {
                 Section {
-                    Text("Du siehst die Kontakte, die du für fonoo freigegeben hast.").font(.footnote).foregroundStyle(.secondary)
+                    Text("Du siehst die Kontakte, die du für fonu freigegeben hast.").font(.footnote).foregroundStyle(.secondary)
                     Button("Freigabe verwalten") { openSettings() }
                 }
             }
@@ -103,10 +103,10 @@ struct DeviceContactsContent: View {
         ScrollView {
             VStack(spacing: 20) {
                 Image(systemName: "person.crop.rectangle.stack").font(.system(size: 44)).foregroundStyle(FonooStyle.accent)
-                Text(directory.access == .restricted ? "Zugriff eingeschränkt" : "Deine Kontakte in fonoo").font(.title2.weight(.semibold))
+                Text(directory.access == .restricted ? "Zugriff eingeschränkt" : "Deine Kontakte in fonu").font(.title2.weight(.semibold))
                 Text(directory.access == .restricted
                      ? "Der Kontaktzugriff ist durch die Geräteeinstellungen eingeschränkt."
-                     : "Finde Namen und Telefonnummern direkt aus deinen iPhone-Kontakten. fonoo lädt dein Adressbuch nicht auf einen Server hoch.")
+                     : "Finde Namen und Telefonnummern direkt aus deinen iPhone-Kontakten. fonu lädt dein Adressbuch nicht auf einen Server hoch.")
                     .foregroundStyle(.secondary).multilineTextAlignment(.center)
                 if let message = directory.errorMessage { Text(message).font(.footnote).foregroundStyle(.secondary) }
                 if directory.access == .notRequested {

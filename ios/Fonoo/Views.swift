@@ -17,13 +17,13 @@ struct FonooWordmark: View {
     var size: CGFloat = 34
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 2) {
-            Text("fonoo").font(.system(size: size, weight: .heavy)).tracking(-size * 0.055)
+            Text("fonu").font(.system(size: size, weight: .heavy)).tracking(-size * 0.055)
                 .foregroundStyle(FonooStyle.ink)
             Circle().fill(FonooStyle.accent).frame(width: size * 0.21, height: size * 0.21)
         }
         .fixedSize()
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("fonoo")
+        .accessibilityLabel("fonu")
     }
 }
 
@@ -564,7 +564,7 @@ struct RecentCallDetails: View {
             }
             if !directory.canRead {
                 Section {
-                    Text("Mit Kontaktzugriff kann fonoo weitere Rufnummern zu diesem Kontakt anbieten.")
+                    Text("Mit Kontaktzugriff kann fonu weitere Rufnummern zu diesem Kontakt anbieten.")
                         .font(.footnote).foregroundStyle(.secondary)
                     if directory.access == .notRequested {
                         Button("Kontaktzugriff erlauben") { Task { await directory.requestAccess() } }
@@ -698,7 +698,7 @@ struct CallView: View {
         ScrollView {
             if let call = phone.manager.controlledCall {
                 VStack(spacing: 18) {
-                    Label(call.incoming ? "fonoo · Eingehender Anruf" : "fonoo · Anruf", systemImage: "phone").font(.subheadline).foregroundStyle(.secondary)
+                    Label(call.incoming ? "fonu · Eingehender Anruf" : "fonu · Anruf", systemImage: "phone").font(.subheadline).foregroundStyle(.secondary)
                         .padding(.bottom, 20)
                     if let original = phone.call, phone.manager.consultation != nil {
                         Label("Gehalten: \(original.displayedContact.name)", systemImage: "pause.circle")
@@ -839,7 +839,7 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section {
-                    NavigationLink { CustomerAccountView() } label: { Label("fonoo-Konto", systemImage: "person.crop.circle") }
+                    NavigationLink { CustomerAccountView() } label: { Label("fonu-Konto", systemImage: "person.crop.circle") }
                 }
                 Section("Telefonie") {
                     LabeledContent("Status", value: phone.registration.label)
@@ -859,13 +859,13 @@ struct SettingsView: View {
                         NavigationLink { AvailabilityView() } label: { Label("Verfügbarkeit & Nicht stören",systemImage:"moon") }
                     } else { Toggle("Nicht stören", isOn: $phone.doNotDisturb) }
                 } footer: { Text(customer.teamContext != nil ? "Dein Verfügbarkeitsstatus gilt für deine Person und alle persönlichen Geräte." : "Eingehende Anrufe werden während der aktiven App abgelehnt.") }
-                Section("fonoo – Einfach verbunden.") {
-                    Text("fonoo v0.1 · Business-Telefonie")
+                Section("fonu – Einfach verbunden.") {
+                    Text("fonu v0.1 · Business-Telefonie")
                     Text("Mit aktiviertem Cloud-Push erreichen dich Anrufe auch bei geschlossener App. Die letzten 100 abgeschlossenen Anrufe und deine Favoriten bleiben lokal auf diesem iPhone gespeichert.")
                         .font(.footnote).foregroundStyle(.secondary)
                 }
             }.scrollContentBackground(.hidden).background(FonooStyle.background)
-                .navigationTitle("fonoo").navigationBarTitleDisplayMode(.inline)
+                .navigationTitle("fonu").navigationBarTitleDisplayMode(.inline)
                 .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Fertig") { dismiss() } } }
         }
     }
@@ -950,7 +950,7 @@ struct CallForwardingView: View {
                                 .focused($editingTarget).accessibilityLabel("Ziel der Umleitung")
                         }
                     } footer: {
-                        Text(mode == "busy" ? "Leitet weiter, wenn deine fonoo-Nebenstelle bereits telefoniert oder Besetzt zurückmeldet. Nicht-Abheben löst keine Umleitung aus." : "Die Umleitung gilt auf der Telefonanlage, auch wenn die App geschlossen ist.")
+                        Text(mode == "busy" ? "Leitet weiter, wenn deine fonu-Nebenstelle bereits telefoniert oder Besetzt zurückmeldet. Nicht-Abheben löst keine Umleitung aus." : "Die Umleitung gilt auf der Telefonanlage, auch wenn die App geschlossen ist.")
                     }
                     if mode != "off" {
                         Section {
@@ -971,8 +971,8 @@ struct CallForwardingView: View {
                 }
             } else {
                 Section {
-                    Text("Bitte zuerst mit deinem fonoo-Konto anmelden und deine Firma verbinden.")
-                    NavigationLink("Zum fonoo-Konto") { CustomerAccountView() }
+                    Text("Bitte zuerst mit deinem fonu-Konto anmelden und deine Firma verbinden.")
+                    NavigationLink("Zum fonu-Konto") { CustomerAccountView() }
                 }
             }
             if busy { ProgressView("Bitte warten …") }
