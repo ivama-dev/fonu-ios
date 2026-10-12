@@ -78,7 +78,7 @@ final class FonooCarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDe
     }
 }
 
-/// Siri resolves numbers or unambiguous names from the existing local Fonu
+/// Siri resolves numbers or unambiguous names from the existing local fonu
 /// favorites/history. It never chooses the first of several matching contacts.
 @MainActor
 final class FonooCallIntentHandler: NSObject, INStartCallIntentHandling {
