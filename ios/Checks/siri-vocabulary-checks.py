@@ -2,13 +2,13 @@
 import plistlib,sys
 from pathlib import Path
 root=Path(__file__).resolve().parents[1]
-app=Path(sys.argv[1]) if len(sys.argv)>1 else root/'Fonoo'
+app=Path(sys.argv[1]) if len(sys.argv)>1 else root/'fonu'
 if len(sys.argv)>1:
  info=plistlib.loads((app/'Info.plist').read_bytes())
  supported=set(info.get('INIntentsSupported',[]))
 else:
  supported=set()
- for config in [root/'Fonoo/Info.plist',root/'Configuration/CarPlay-Info.plist']:
+ for config in [root/'fonu/Info.plist',root/'Configuration/CarPlay-Info.plist']:
   supported.update(plistlib.loads(config.read_bytes()).get('INIntentsSupported',[]))
 assert 'INStartCallIntent' in supported
 for language in ('en','de'):

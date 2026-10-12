@@ -7,7 +7,7 @@ import UIKit
 /// One shared PhoneStore serves iPhone, CarPlay and Siri. There is no second SIP
 /// registration or password copy for the car display.
 @MainActor
-final class FonooCarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
+final class fonuCarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
     private var interface: CPInterfaceController?
     private var subscriptions: Set<AnyCancellable> = []
     private let favorites = CPListTemplate(title: "Favoriten", sections: [])
@@ -17,7 +17,7 @@ final class FonooCarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDe
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene,
                                   didConnect interfaceController: CPInterfaceController) {
         interface = interfaceController
-        guard let phone = FonooAppDelegate.current?.phone else { return }
+        guard let phone = fonuAppDelegate.current?.phone else { return }
         self.phone = phone
         favorites.tabTitle = "Favoriten"; favorites.tabImage = UIImage(systemName: "star.fill")
         recents.tabTitle = "Anrufliste"; recents.tabImage = UIImage(systemName: "clock.fill")
@@ -40,7 +40,7 @@ final class FonooCarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDe
     }
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
         guard userActivity.activityType == "INStartCallIntent" else { return }
-        FonooAppDelegate.current?.phone.continueCallActivity(userActivity)
+        fonuAppDelegate.current?.phone.continueCallActivity(userActivity)
     }
     private func render() {
         guard let phone else { return }
@@ -81,7 +81,7 @@ final class FonooCarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDe
 /// Siri resolves numbers or unambiguous names from the existing local fonu
 /// favorites/history. It never chooses the first of several matching contacts.
 @MainActor
-final class FonooCallIntentHandler: NSObject, INStartCallIntentHandling {
+final class fonuCallIntentHandler: NSObject, INStartCallIntentHandling {
     private weak var phone: PhoneStore?
     init(phone: PhoneStore) { self.phone = phone }
     private func contact(_ person: INPerson) -> Contact? {

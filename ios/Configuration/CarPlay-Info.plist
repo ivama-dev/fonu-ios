@@ -16,7 +16,7 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>FonooCarPlayEnabled</key>
+	<key>fonuCarPlayEnabled</key>
 	<true/>
 	<key>INIntentsSupported</key>
 	<array>
@@ -49,11 +49,11 @@
 			<array>
 				<dict>
 					<key>UISceneConfigurationName</key>
-					<string>fonoo CarPlay</string>
+					<string>fonu CarPlay</string>
 					<key>UISceneClassName</key>
 					<string>CPTemplateApplicationScene</string>
 					<key>UISceneDelegateClassName</key>
-					<string>$(PRODUCT_MODULE_NAME).FonooCarPlaySceneDelegate</string>
+					<string>$(PRODUCT_MODULE_NAME).fonuCarPlaySceneDelegate</string>
 				</dict>
 			</array>
 		</dict>

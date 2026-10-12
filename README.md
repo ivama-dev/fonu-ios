@@ -1,6 +1,6 @@
 # fonu für iOS
 
-Native SwiftUI-App ab iOS 17 mit Liblinphone 5.5.23. Bundle-ID `app.fonoo.ios`; Xcode-Scheme **Fonoo**. Dieses Repository enthält ausschließlich App-Quellen, App-Konfiguration, Assets, Lizenzen und isolierte Prüfungen. Der Telefonie-/Kontoserver wird separat verwaltet.
+Native SwiftUI-App ab iOS 17 mit Liblinphone 5.5.23. Bundle-ID `app.fonoo.ios`; Xcode-Scheme **fonu**. Dieses Repository enthält ausschließlich App-Quellen, App-Konfiguration, Assets, Lizenzen und isolierte Prüfungen. Der Telefonie-/Kontoserver wird separat verwaltet.
 
 ## Bauen und prüfen
 
@@ -9,9 +9,9 @@ Xcode 27 und Swift auf macOS verwenden. Das bestehende Entwicklungsteam ist im P
 ```sh
 bash ios/Checks/run-checks.sh
 python3 ios/Checks/customer-provisioning-checks.py
-xcodebuild -project ios/Fonoo.xcodeproj -scheme Fonoo \
+xcodebuild -project ios/fonu.xcodeproj -scheme fonu \
   -configuration Debug -destination 'generic/platform=iOS Simulator' \
-  -derivedDataPath /private/tmp/fonoo-ios-build \
+  -derivedDataPath /private/tmp/fonu-ios-build \
   -clonedSourcePackagesDirPath build/SourcePackages build
 ```
 
@@ -31,7 +31,7 @@ Build **28** (iOS) enthält die automatische Synchronisierung. Gemeinsame Swift-
 
 Echte Geräteabnahme zwischen iPhone, Mac und Windows bleibt erforderlich. Ein erfolgreicher Quellbuild bestätigt keine Veröffentlichung in TestFlight oder im Windows Store.
 
-`ios/Fonoo/` enthält Anmeldung und automatische Cloud-Nebenstelle, Geräteprofile, Team/Präsenz, Kontakte/Favoriten, synchronisierte Anrufhistorie, Weiterleitungen und Gesprächssteuerung. VoIP-Push, CallKit/LiveCommunicationKit, Siri und CarPlay bleiben erhalten. `SIPConnectionCoordinator` serialisiert Wiederverbindungen; `LinphoneSIPCore` kapselt die einzige Telefonie-Engine. Zertifikatsprüfung, Pflicht-SRTP und gerätegebundene Schlüsselbundablage bleiben aktiv.
+`ios/fonu/` enthält Anmeldung und automatische Cloud-Nebenstelle, Geräteprofile, Team/Präsenz, Kontakte/Favoriten, synchronisierte Anrufhistorie, Weiterleitungen und Gesprächssteuerung. VoIP-Push, CallKit/LiveCommunicationKit, Siri und CarPlay bleiben erhalten. `SIPConnectionCoordinator` serialisiert Wiederverbindungen; `LinphoneSIPCore` kapselt die einzige Telefonie-Engine. Zertifikatsprüfung, Pflicht-SRTP und gerätegebundene Schlüsselbundablage bleiben aktiv.
 
 Die [Mac-App](https://github.com/ivama-dev/fonu-macos) übernimmt einen kontrollierten Stand der gemeinsamen Dateien. Änderungen an Konto-, Verbindungs- und API-Modellen müssen auf beiden Plattformen abgestimmt werden.
 
@@ -45,4 +45,4 @@ Die fonu-iOS-App steht wie der Windows-Client unter **GNU Affero General Public 
 
 ## Markenname und technische Kompatibilität
 
-Seit 12. Oktober 2026 lautet der Marken- und Repository-Name **fonu**. Sichtbare Texte und GitHub-Verweise verwenden den neuen Namen. Bestehende technische Kennungen mit `fonoo`/`Fonoo` (unter anderem Bundle-/Store-IDs, Xcode-Schemes, Quellpfade, Push-Felder und lokale Datenablagen) bleiben zur Kompatibilität erhalten. Auch bisherige Server-, API-, E-Mail- und Deep-Link-Adressen gelten weiter, bis sie separat migriert werden. Historische Betriebsnachweise dokumentieren den damaligen Stand. Diese Änderung veröffentlicht keine neue App-Version und führt kein Server-Deployment aus.
+Seit 12. Oktober 2026 lautet der Marken- und Repository-Name **fonu**. Die Xcode-Projekte, Targets, Schemes, Quellordner und Swift-Namen verwenden ebenfalls fonu. Sichtbare Texte und GitHub-Verweise verwenden den neuen Namen. Bestehende technische Kennungen mit `fonu`/`fonu` (unter anderem Bundle-/Store-IDs, Push-Felder und lokale Datenablagen) bleiben zur Kompatibilität erhalten. Auch bisherige Server-, API-, E-Mail- und Deep-Link-Adressen gelten weiter, bis sie separat migriert werden. Historische Betriebsnachweise dokumentieren den damaligen Stand. Diese Änderung veröffentlicht keine neue App-Version und führt kein Server-Deployment aus.

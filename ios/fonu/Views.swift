@@ -2,7 +2,7 @@ import Contacts
 import ContactsUI
 import SwiftUI
 
-enum FonooStyle {
+enum fonuStyle {
     static let accent = Color("AccentColor")
     static let ink = Color(red: 0.133, green: 0.125, blue: 0.196)
     static let background = Color(red: 0.980, green: 0.976, blue: 0.988)
@@ -13,13 +13,13 @@ enum FonooStyle {
 }
 
 /// Shared wordmark: lowercase ink lettering and a violet dot.
-struct FonooWordmark: View {
+struct fonuWordmark: View {
     var size: CGFloat = 34
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 2) {
             Text("fonu").font(.system(size: size, weight: .heavy)).tracking(-size * 0.055)
-                .foregroundStyle(FonooStyle.ink)
-            Circle().fill(FonooStyle.accent).frame(width: size * 0.21, height: size * 0.21)
+                .foregroundStyle(fonuStyle.ink)
+            Circle().fill(fonuStyle.accent).frame(width: size * 0.21, height: size * 0.21)
         }
         .fixedSize()
         .accessibilityElement(children: .ignore)
@@ -27,15 +27,15 @@ struct FonooWordmark: View {
     }
 }
 
-struct FonooCallButtonStyle: ButtonStyle {
+struct fonuCallButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .foregroundStyle(isEnabled ? Color.white : FonooStyle.accent.opacity(0.45))
+            .foregroundStyle(isEnabled ? Color.white : fonuStyle.accent.opacity(0.45))
             .background {
                 RoundedRectangle(cornerRadius: 24)
-                    .fill(isEnabled ? AnyShapeStyle(FonooStyle.actionGradient) : AnyShapeStyle(FonooStyle.accent.opacity(0.10)))
+                    .fill(isEnabled ? AnyShapeStyle(fonuStyle.actionGradient) : AnyShapeStyle(fonuStyle.accent.opacity(0.10)))
             }
             .opacity(configuration.isPressed ? 0.78 : 1)
     }
@@ -70,7 +70,7 @@ struct RootView: View {
                         case .team: TeamView()
                         }
                     }
-                    .background(FonooStyle.background)
+                    .background(fonuStyle.background)
                     .safeAreaInset(edge: .top, spacing: 0) {
                         VStack(alignment: .leading, spacing: 6) {
                             Text(destination.rawValue)
@@ -81,13 +81,13 @@ struct RootView: View {
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 20).padding(.vertical, 10)
-                        .background(FonooStyle.background)
+                        .background(fonuStyle.background)
                     }
                     .navigationTitle("")
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarItem(placement: .topBarLeading) {
-                            FonooWordmark(size: 30)
+                            fonuWordmark(size: 30)
                         }
                         ToolbarItem(placement: .topBarTrailing) {
                             AvailabilityProfileMenu()
@@ -145,9 +145,9 @@ struct Avatar: View {
     var body: some View {
         Text(contact.initials)
             .font(large ? .largeTitle : .headline)
-            .foregroundStyle(FonooStyle.accent)
+            .foregroundStyle(fonuStyle.accent)
             .frame(width: large ? 88 : 48, height: large ? 88 : 48)
-            .background(FonooStyle.softGradient, in: RoundedRectangle(cornerRadius: large ? 29 : 16))
+            .background(fonuStyle.softGradient, in: RoundedRectangle(cornerRadius: large ? 29 : 16))
             .accessibilityHidden(true)
     }
 }
@@ -227,14 +227,14 @@ struct FavoritesView: View {
                         HStack(alignment: .top) {
                             Avatar(contact: contact)
                             Spacer(minLength: 4)
-                            Image(systemName: "phone").font(.subheadline).foregroundStyle(FonooStyle.accent)
+                            Image(systemName: "phone").font(.subheadline).foregroundStyle(fonuStyle.accent)
                         }.padding(.bottom, 9)
                         Text(contact.name).font(.headline).foregroundStyle(.primary)
                         Text("\(contact.role) · \(contact.number)").font(.caption).foregroundStyle(.secondary)
                         if let member = customer.presenceMember(for:contact) { PresenceStatusView(userID:member.id) }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading).padding(17)
-                    .background(FonooStyle.surface, in: RoundedRectangle(cornerRadius: 23))
+                    .background(fonuStyle.surface, in: RoundedRectangle(cornerRadius: 23))
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel("\(contact.name) anrufen, \(contact.role), \(contact.number)")
@@ -255,8 +255,8 @@ struct FavoritesView: View {
                                 if let member = customer.presenceMember(for:contact) { PresenceStatusView(userID:member.id) }
                             }
                             Spacer()
-                            Image(systemName: "phone").foregroundStyle(FonooStyle.accent)
-                        }.padding(12).background(FonooStyle.surface, in: RoundedRectangle(cornerRadius: 18))
+                            Image(systemName: "phone").foregroundStyle(fonuStyle.accent)
+                        }.padding(12).background(fonuStyle.surface, in: RoundedRectangle(cornerRadius: 18))
                     }.buttonStyle(.plain)
                     .accessibilityLabel("\(contact.name), Favorit anrufen")
                 }
@@ -284,16 +284,16 @@ struct FavoritesView: View {
                             } else { selected = person }
                         } label: {
                             HStack(spacing: 12) {
-                                Image(systemName: "person.crop.circle").font(.title).foregroundStyle(FonooStyle.accent)
+                                Image(systemName: "person.crop.circle").font(.title).foregroundStyle(fonuStyle.accent)
                                 VStack(alignment: .leading, spacing: 5) {
                                     Text(person.name).foregroundStyle(.primary)
                                     Text(person.numbers.count == 1 ? person.numbers[0].value : "\(person.numbers.count) Rufnummern")
                                         .font(.subheadline).foregroundStyle(.secondary)
                                 }
                                 Spacer()
-                                Image(systemName: "phone").foregroundStyle(FonooStyle.accent)
+                                Image(systemName: "phone").foregroundStyle(fonuStyle.accent)
                             }.padding(16).frame(maxWidth: .infinity, alignment: .leading)
-                                .background(FonooStyle.surface, in: RoundedRectangle(cornerRadius: 18))
+                                .background(fonuStyle.surface, in: RoundedRectangle(cornerRadius: 18))
                         }.buttonStyle(.plain)
                         .accessibilityLabel("\(person.name), \(person.numbers.count == 1 ? "Anruf starten" : "Rufnummer auswählen")")
                         DeviceContactFavoriteButton(person: person)
@@ -320,7 +320,7 @@ struct FavoritesView: View {
                 }
                 if let message = directory.errorMessage { Text(message).font(.footnote).foregroundStyle(.secondary) }
             }.padding(18).frame(maxWidth: .infinity, alignment: .leading)
-                .background(FonooStyle.surface, in: RoundedRectangle(cornerRadius: 18))
+                .background(fonuStyle.surface, in: RoundedRectangle(cornerRadius: 18))
         }
     }
 
@@ -409,7 +409,7 @@ struct FavoriteEditor: View {
                 Section { FavoriteSyncNotice() }
             }
             .environment(\.editMode, .constant(.active))
-            .scrollContentBackground(.hidden).background(FonooStyle.background)
+            .scrollContentBackground(.hidden).background(fonuStyle.background)
             .navigationTitle("Favoriten bearbeiten").navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -627,13 +627,13 @@ struct NumberKeys: View {
                 Button { press(key.0) } label: {
                     VStack(spacing: 0) {
                         Text(key.0).font(.system(size: 30, weight: .regular, design: .rounded))
-                            .foregroundStyle(FonooStyle.accent)
+                            .foregroundStyle(fonuStyle.accent)
                         Text(key.1.isEmpty ? " " : key.1).font(.system(size: 10)).tracking(2)
                             .foregroundStyle(.secondary)
                     }
                     .foregroundStyle(.primary).frame(maxWidth: .infinity, minHeight: 67)
-                    .background(FonooStyle.surface, in: RoundedRectangle(cornerRadius: 25))
-                    .overlay { RoundedRectangle(cornerRadius: 25).strokeBorder(FonooStyle.accent.opacity(0.06)) }
+                    .background(fonuStyle.surface, in: RoundedRectangle(cornerRadius: 25))
+                    .overlay { RoundedRectangle(cornerRadius: 25).strokeBorder(fonuStyle.accent.opacity(0.06)) }
                 }.accessibilityLabel(key.0)
             }
         }
@@ -678,7 +678,7 @@ struct DialpadView: View {
                         Image(systemName: "phone.fill").font(.title2)
                             .frame(maxWidth: .infinity, minHeight: 60)
                     }
-                    .buttonStyle(FonooCallButtonStyle())
+                    .buttonStyle(fonuCallButtonStyle())
                     .disabled(number.isEmpty || phone.busy).accessibilityLabel("Nummer anrufen")
                     Button { if !number.isEmpty { number.removeLast() } } label: {
                         Image(systemName: "delete.left").font(.title2).frame(maxWidth: .infinity, minHeight: 56)
@@ -702,7 +702,7 @@ struct CallView: View {
                         .padding(.bottom, 20)
                     if let original = phone.call, phone.manager.consultation != nil {
                         Label("Gehalten: \(original.displayedContact.name)", systemImage: "pause.circle")
-                            .font(.subheadline).foregroundStyle(FonooStyle.accent)
+                            .font(.subheadline).foregroundStyle(fonuStyle.accent)
                     }
                     Avatar(contact: call.displayedContact, large: true)
                     Text(call.displayedContact.name).font(.largeTitle).multilineTextAlignment(.center)
@@ -716,7 +716,7 @@ struct CallView: View {
                         else if call.isHeld { Text("Anruf wird gehalten") }
                         else if call.isRemoteHeld { Text("Gegenstelle hält das Gespräch") }
                         else if let date = call.connectedAt { Text(date, style: .timer).monospacedDigit() }
-                    }.font(.subheadline).foregroundStyle(FonooStyle.accent)
+                    }.font(.subheadline).foregroundStyle(fonuStyle.accent)
                     if phone.manager.consultation != nil || phone.manager.consultationPending {
                         VStack(spacing: 12) {
                             Button("Gespräche verbinden") { phone.manager.completeConsultation() }
@@ -725,7 +725,7 @@ struct CallView: View {
                             Button("Zurück zum ersten Gespräch") { phone.manager.returnToOriginal() }
                                 .disabled(phone.manager.transferPending)
                         }.padding(16).frame(maxWidth: .infinity)
-                            .background(FonooStyle.surface, in: RoundedRectangle(cornerRadius: 20))
+                            .background(fonuStyle.surface, in: RoundedRectangle(cornerRadius: 20))
                     }
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 85), spacing: 12)], spacing: 24) {
                         callButton("Stumm", symbol: call.isMuted ? "mic.slash.fill" : "mic", selected: call.isMuted) { phone.toggleMute() }
@@ -742,7 +742,7 @@ struct CallView: View {
                                 if phone.manager.preparingCall || phone.manager.acceptingCall { ProgressView().tint(.white) }
                                 Label(phone.manager.acceptingCall ? "Verbindung wird aufgebaut …" : "Annehmen", systemImage: "phone.fill")
                             }.frame(maxWidth: .infinity, minHeight: 40)
-                        }.padding(.vertical, 8).buttonStyle(FonooCallButtonStyle()).disabled(phone.manager.preparingCall || phone.manager.acceptingCall)
+                        }.padding(.vertical, 8).buttonStyle(fonuCallButtonStyle()).disabled(phone.manager.preparingCall || phone.manager.acceptingCall)
                     }
                     Button(role: .destructive) { phone.end() } label: {
                         Label(call.phase == .incoming ? "Ablehnen" : phone.manager.consultation != nil ? "Beide Gespräche beenden" : "Auflegen", systemImage: "phone.down.fill").frame(maxWidth: .infinity, minHeight: 40)
@@ -752,7 +752,7 @@ struct CallView: View {
                 }.frame(maxWidth: 390).padding(26).frame(maxWidth: .infinity)
             }
         }
-        .background(FonooStyle.background.ignoresSafeArea())
+        .background(fonuStyle.background.ignoresSafeArea())
         .interactiveDismissDisabled()
         .onChange(of: phone.manager.controlledCall?.id) { _, _ in sheet = nil }
         .onChange(of: phone.manager.controlledCall?.phase) { _, phase in if phase == .ending { sheet = nil } }
@@ -771,7 +771,7 @@ struct CallView: View {
             VStack(spacing: 9) {
                 Image(systemName: symbol).font(.title2)
                     .frame(width: 66, height: 66)
-                    .background(selected ? FonooStyle.accent : FonooStyle.surface, in: RoundedRectangle(cornerRadius: 23))
+                    .background(selected ? fonuStyle.accent : fonuStyle.surface, in: RoundedRectangle(cornerRadius: 23))
                     .foregroundStyle(selected ? Color(uiColor: .systemBackground) : Color.primary)
                 Text(title).font(.caption).foregroundStyle(.primary)
             }.frame(maxWidth: .infinity)
@@ -790,10 +790,10 @@ struct AudioSheet: View {
                         Button { phone.setAudio(route.id) } label: {
                             HStack {
                                 Label(route.name, systemImage: route.symbol)
-                                    .foregroundStyle(phone.selectedAudioID == route.id ? FonooStyle.accent : .primary)
+                                    .foregroundStyle(phone.selectedAudioID == route.id ? fonuStyle.accent : .primary)
                                 Spacer()
                                 if phone.selectedAudioID == route.id {
-                                    Image(systemName: "checkmark.circle.fill").foregroundStyle(FonooStyle.accent)
+                                    Image(systemName: "checkmark.circle.fill").foregroundStyle(fonuStyle.accent)
                                 }
                             }
                         }
@@ -808,7 +808,7 @@ struct AudioSheet: View {
             .task { phone.manager.refreshAudioDevices() }
         }
         .presentationDetents([.medium, .large])
-        .tint(FonooStyle.accent)
+        .tint(fonuStyle.accent)
     }
 }
 
@@ -820,7 +820,7 @@ struct ToneSheet: View {
             Text(toneDisplay)
                 .font(.headline).lineLimit(2).minimumScaleFactor(0.7)
             NumberKeys { phone.sendTone($0) }
-        }.padding(24).background(FonooStyle.background)
+        }.padding(24).background(fonuStyle.background)
             .presentationDetents([.large]).presentationDragIndicator(.visible)
     }
 
@@ -864,7 +864,7 @@ struct SettingsView: View {
                     Text("Mit aktiviertem Cloud-Push erreichen dich Anrufe auch bei geschlossener App. Die letzten 100 abgeschlossenen Anrufe und deine Favoriten bleiben lokal auf diesem iPhone gespeichert.")
                         .font(.footnote).foregroundStyle(.secondary)
                 }
-            }.scrollContentBackground(.hidden).background(FonooStyle.background)
+            }.scrollContentBackground(.hidden).background(fonuStyle.background)
                 .navigationTitle("fonu").navigationBarTitleDisplayMode(.inline)
                 .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Fertig") { dismiss() } } }
         }
@@ -914,7 +914,7 @@ struct TransferSheet: View {
             }
             .navigationTitle("Vermitteln").navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Abbrechen") { dismiss() } } }
-        }.tint(FonooStyle.accent)
+        }.tint(fonuStyle.accent)
     }
 }
 
@@ -982,7 +982,7 @@ struct CallForwardingView: View {
             }
         }
         .disabled(busy)
-        .scrollContentBackground(.hidden).background(FonooStyle.background)
+        .scrollContentBackground(.hidden).background(fonuStyle.background)
         .navigationTitle("Anrufumleitung").navigationBarTitleDisplayMode(.inline)
         .toolbar { ToolbarItemGroup(placement: .keyboard) { Spacer(); Button("Fertig") { editingTarget = false } } }
         .task(id: tenantID) { saved = nil; mode = "off"; target = ""; await load(reset: true) }

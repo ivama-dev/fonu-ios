@@ -5,15 +5,15 @@ import CarPlay
 
 /// Created before the first scene; a future PushKit cold start must not depend on a view.
 @MainActor
-final class FonooAppDelegate: NSObject, UIApplicationDelegate {
-    static weak var current: FonooAppDelegate?
+final class fonuAppDelegate: NSObject, UIApplicationDelegate {
+    static weak var current: fonuAppDelegate?
     let phone: PhoneStore = {
         #if DEBUG
         if TeamPreview.enabled { return PhoneStore(previewCore: TeamPreviewCore()) }
         #endif
         return PhoneStore()
     }()
-    private lazy var callIntentHandler = FonooCallIntentHandler(phone: phone)
+    private lazy var callIntentHandler = fonuCallIntentHandler(phone: phone)
     let customer: CustomerAccount = {
         #if DEBUG
         if TeamPreview.enabled { return CustomerAccount(teamPreview: true) }
@@ -38,15 +38,15 @@ final class FonooAppDelegate: NSObject, UIApplicationDelegate {
     }
     func application(_ application: UIApplication, handlerFor intent: INIntent) -> Any? {
         // Only the separate CarPlay configuration advertises this capability.
-        guard Bundle.main.object(forInfoDictionaryKey: "FonooCarPlayEnabled") as? Bool == true else { return nil }
+        guard Bundle.main.object(forInfoDictionaryKey: "fonuCarPlayEnabled") as? Bool == true else { return nil }
         return intent is INStartCallIntent ? callIntentHandler : nil
     }
 }
 
 @main
 @MainActor
-struct FonooApp: App {
-    @UIApplicationDelegateAdaptor(FonooAppDelegate.self) private var delegate
+struct fonuApp: App {
+    @UIApplicationDelegateAdaptor(fonuAppDelegate.self) private var delegate
     @Environment(\.scenePhase) private var scenePhase
     var body: some Scene {
         WindowGroup {
@@ -58,7 +58,7 @@ struct FonooApp: App {
                     if TeamPreview.enabled { Text("Vorschau · Beispieldaten").font(.caption).foregroundStyle(.secondary).padding(8) }
                 }
                 #endif
-                .tint(FonooStyle.accent)
+                .tint(fonuStyle.accent)
                 .preferredColorScheme(.light)
                 .onChange(of: scenePhase, initial:true) { _, phase in
                     delegate.customer.setPresenceForeground(phase == .active)

@@ -6,7 +6,7 @@ struct ContactsTabView: View {
     @State private var query = ""
     var body: some View {
         DeviceContactsContent(query: $query) { phone.start($0) }
-            .background(FonooStyle.background)
+            .background(fonuStyle.background)
             .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always),
                         prompt: "Name oder Telefonnummer")
     }
@@ -31,7 +31,7 @@ struct DeviceContactsContent: View {
             if directory.canRead { contactList }
             else { accessView }
         }
-        .background(FonooStyle.background)
+        .background(fonuStyle.background)
         .onAppear { visible = true }
         .onDisappear { visible = false; directory.clear(); selected = nil }
         .task(id: shouldLoad) {
@@ -75,14 +75,14 @@ struct DeviceContactsContent: View {
                         } else { selected = person }
                     } label: {
                         HStack(spacing: 12) {
-                            Image(systemName: "person.crop.circle").font(.title).foregroundStyle(FonooStyle.accent)
+                            Image(systemName: "person.crop.circle").font(.title).foregroundStyle(fonuStyle.accent)
                             VStack(alignment: .leading, spacing: 5) {
                                 Text(person.name).foregroundStyle(.primary)
                                 Text(person.numbers.count == 1 ? person.numbers[0].value : "\(person.numbers.count) Rufnummern")
                                     .font(.subheadline).foregroundStyle(.secondary)
                             }
                             Spacer()
-                            Image(systemName: "phone").foregroundStyle(FonooStyle.accent)
+                            Image(systemName: "phone").foregroundStyle(fonuStyle.accent)
                         }.padding(.vertical, 5)
                     }
                     .accessibilityLabel("\(person.name), \(person.numbers.count == 1 ? "Anruf starten" : "Rufnummer auswählen")")
@@ -102,7 +102,7 @@ struct DeviceContactsContent: View {
     private var accessView: some View {
         ScrollView {
             VStack(spacing: 20) {
-                Image(systemName: "person.crop.rectangle.stack").font(.system(size: 44)).foregroundStyle(FonooStyle.accent)
+                Image(systemName: "person.crop.rectangle.stack").font(.system(size: 44)).foregroundStyle(fonuStyle.accent)
                 Text(directory.access == .restricted ? "Zugriff eingeschränkt" : "Deine Kontakte in fonu").font(.title2.weight(.semibold))
                 Text(directory.access == .restricted
                      ? "Der Kontaktzugriff ist durch die Geräteeinstellungen eingeschränkt."
@@ -147,14 +147,14 @@ struct DeviceContactFavoriteButton: View {
             }
         }
         .buttonStyle(.borderless)
-        .tint(FonooStyle.accent)
+        .tint(fonuStyle.accent)
         .sheet(isPresented: $choosingNumber) {
             DeviceContactNumbersView(person: person, onCall: nil)
         }
     }
     private var icon: some View {
         Image(systemName: hasFavorite ? "star.fill" : "star")
-            .font(.title3).foregroundStyle(FonooStyle.accent)
+            .font(.title3).foregroundStyle(fonuStyle.accent)
             .frame(width: 44, height: 44).contentShape(Rectangle())
     }
 }
@@ -181,7 +181,7 @@ struct DeviceContactNumbersView: View {
                                     HStack {
                                         numberLabel(number)
                                         Spacer()
-                                        Image(systemName: "phone").foregroundStyle(FonooStyle.accent)
+                                        Image(systemName: "phone").foregroundStyle(fonuStyle.accent)
                                     }.contentShape(Rectangle())
                                 }
                                 .buttonStyle(.borderless)
@@ -192,7 +192,7 @@ struct DeviceContactNumbersView: View {
                             }
                             Button { phone.toggleFavorite(contact) } label: {
                                 Image(systemName: favorite ? "star.fill" : "star")
-                                    .font(.title3).foregroundStyle(FonooStyle.accent)
+                                    .font(.title3).foregroundStyle(fonuStyle.accent)
                                     .frame(width: 44, height: 44).contentShape(Rectangle())
                             }
                             .buttonStyle(.borderless)
@@ -208,7 +208,7 @@ struct DeviceContactNumbersView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Fertig") { dismiss() } } }
         }
-        .tint(FonooStyle.accent)
+        .tint(fonuStyle.accent)
     }
     private func numberLabel(_ number: DevicePhoneNumber) -> some View {
         VStack(alignment: .leading, spacing: 5) {

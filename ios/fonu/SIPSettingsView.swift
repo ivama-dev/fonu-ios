@@ -75,7 +75,7 @@ struct DiagnosticsView: View {
             } header: { Text("Ereignisse · \(diagnostics.entries.count)") }
               footer: { Text("Neueste zuerst. Wiederholte Netzwerk-Meldungen bestätigen nur den Netzstatus, keine SIP-Registrierung.") }
             Section { Text("Nur dieser App-Lauf. Keine Zugangsdaten, Rufnummern oder DTMF-Ziffern im Protokoll.").font(.footnote) }
-        }.scrollContentBackground(.hidden).background(FonooStyle.background)
+        }.scrollContentBackground(.hidden).background(fonuStyle.background)
             .navigationTitle("Verbindungsdetails").navigationBarTitleDisplayMode(.inline)
     }
 
@@ -159,7 +159,7 @@ struct RegistrationConsoleView: View {
             Text("Passwörter, Authentifizierungsheader und SIP-Adressen werden nicht aufgezeichnet.")
                 .font(.footnote).padding()
         }
-        .background(FonooStyle.background)
+        .background(fonuStyle.background)
         .navigationTitle("Registrierungsprotokoll")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -214,7 +214,7 @@ struct SIPMessagesView: View {
             }
             Text("Gefilterte SDK-Meldungen, kein vollständiger Netzwerkmitschnitt. Nicht freigegebene Header und Nachrichteninhalte werden ausgeblendet.")
                 .font(.footnote).padding()
-        }.background(FonooStyle.background)
+        }.background(fonuStyle.background)
             .navigationTitle("SIP-Meldungen").navigationBarTitleDisplayMode(.inline)
     }
 }
